@@ -1,3 +1,10 @@
+<%= form_tag "/payments", :method => 'get' do %>
+    <select name="filter_plan">
+        <%= options_from_collection_for_select(InternetPackage.all, :plan, :plan) %>
+    </select>
+    <%=submit_tag "filter"%>
+<%end %>
+
 <div class="container">
     <div class="row">
         <div class="col-xs-10">
@@ -46,3 +53,4 @@
         </div>
     </div>
 </div>
+

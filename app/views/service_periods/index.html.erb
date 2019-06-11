@@ -29,7 +29,7 @@
                         <tbody>
                         <%@service_periods.each do |service_period| %>
                             <tr>
-                                <td>$<%=service_period.internet_package.plan%></td>
+                                <td><%=service_period.internet_package.plan%></td>
                                 <td><%=service_period.start_time.strftime("%A, %b %d, %Y")%></td>
                                 <td><%=service_period.end_time.strftime("%A, %b %d, %Y")%></td>
                             </tr> 

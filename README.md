@@ -1,6 +1,6 @@
 # ISP-Website
 
-A website that allows you to purchase an internet package plan and keep track of your payment history, service periods, and internet status changes. It connects to a router through the mtik gem and makes changes to pppoe profiles. This is meant to be a skeleton project to communicate with different routers and store information on the website. No payment API has been implemented yet.
+A website that allows you to buy an internet package plan. It keeps track of your payment history, service periods, and internet status changes. It connects to a router through the mtik gem and makes changes to pppoe profiles. This is a skeleton project to communicate with different routers and store information on the website. No payment API has been implemented yet.
 
 ## Getting Started 
 

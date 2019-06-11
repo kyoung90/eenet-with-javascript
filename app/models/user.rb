@@ -29,4 +29,9 @@ class User < ApplicationRecord
         end
         activated
     end 
+
+    def sorted_payments
+        self.payments.order(payed_date: :desc)
+    end 
+
 end

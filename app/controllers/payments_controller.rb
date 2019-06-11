@@ -1,10 +1,13 @@
 class PaymentsController < ApplicationController
-    
-
     def index
+        # byebug
         user = User.find_by(id: current_user)
         if user 
-            @payments = user.payments.order(payed_date: :desc)
+            if params[:filter_plan]
+                @payments = user.sorted_payments.joins(:internet_package).where(internet_packages: {plan: params[:filter_plan]}) 
+            else
+                @payments = user.sorted_payments
+            end 
         else 
             redirect_to new_session_path, alert: "You must be logged in to do that."
         end 
