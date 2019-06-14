@@ -6,32 +6,73 @@
         <li>Download Speed: <%=@internet_package.download_speed%> mbps</li>
     </ul>
 
-    <%=form_for @internet_package.payments.build, url: internet_package_payments_path(@internet_package), html: {id: @internet_package.id} do |f|%>
+    <% if !!@user.admin %>
 
-        <%=f.label :months%>
-        <br>
-        <%=f.number_field :months%>
-        <br>
-        <br>
-        <%=f.submit%>
-    <%end %>
+      <button class="admin-users" data-id="<%= @internet_package.id %>">Show Active Users</button>
+      
+      <ul class="show-users">
+        
+      </ul>
 
-  <div>
-    <h3 id="username"></h3>
-    <p id="paymentMonths"></p>
-    <h4 id="internetStatusChange"></h4>
-    <h4 id="servicePeriod"></h4>
-    <p id="servicePeriodStartDate"></p>
-    <p id="servicePeriodEndDate"></p>
-  </div>
+    <% else %>
+
+      <%=form_for @internet_package.payments.build, url: internet_package_payments_path(@internet_package), html: {id: @internet_package.id} do |f|%>
+          <%=f.label :months%>
+          <br>
+          <%=f.number_field :months%>
+          <br>
+          <br>
+          <%=f.submit%>
+      <%end %>
+
+      <div>
+        <h3 id="username"></h3>
+        <p id="paymentMonths"></p>
+        <h4 id="internetStatusChange"></h4>
+        <h4 id="servicePeriod"></h4>
+        <p id="servicePeriodStartDate"></p>
+        <p id="servicePeriodEndDate"></p>
+      </div>
+
+    <% end %>
 </div>
 
 <script type="text/javascript" charset="utf-8">
   $(function () {
-    let id = $('form')[0].id
+    $('.admin-users').on('click', function(event) {
+      //prevent form from submitting the default way
+      event.preventDefault();
+
+      let id = $(this)[0]["dataset"]["id"];
+
+      $.get("/internet_packages/" + id + ".json", function(data) {
+
+        let users = data["users"];
+        ul = $(".show-users")
+        let users_data = users.map(user => 
+          '<li>' +
+            user["username"] +
+            '<ul>' + 
+              '<li>' + "Start Time: "  + user["service_periods"][user["service_periods"].length - 1]["start_time"] + '</li>' + 
+              '<li>' + "End Time: "  + user["service_periods"][user["service_periods"].length - 1]["end_time"] + '</li>' + 
+            '</ul>' + 
+          '</li>'
+        ).join('')
+        console.log(users)
+        console.log(users_data)
+        ul.append(users_data)
+      });
+    });
+  });
+
+
+  $(function () {
     $('form').submit(function(event) {
       //prevent form from submitting the default way
       event.preventDefault();
+
+      let id = $('form')[0].id
+
       let values = $(this).serialize();
  
       let posting = $.post('/internet_packages/' + id + '/payments.json' , values);

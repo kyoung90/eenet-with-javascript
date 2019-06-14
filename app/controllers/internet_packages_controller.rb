@@ -10,9 +10,15 @@ class InternetPackagesController < ApplicationController
             redirect_to internet_packages_index, alert: "Internet Package Not Found."
         end 
 
-        respond_to do |format|
-            format.html { render :show }
-            format.json { render json: @internet_package }
+
+        if current_user
+            @user = User.find_by(id: current_user)
+            if !!@user.admin
+                respond_to do |format|
+                    format.html { render :show }
+                    format.json { render json: @internet_package, include: '**' }   
+                end
+            end
         end
     end 
 end
