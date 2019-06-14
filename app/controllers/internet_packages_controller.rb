@@ -18,6 +18,12 @@ class InternetPackagesController < ApplicationController
                     format.html { render :show }
                     format.json { render json: @internet_package, include: '**' }   
                 end
+            else 
+                @internet_package.users = []
+                respond_to do |format|
+                    format.html { render :show }
+                    format.json { render json: @internet_package }   
+                end
             end
         end
     end 

@@ -1,10 +1,14 @@
 <div class="clearfix">
-    <h1>Plan <%=@internet_package.plan %></h1>
+  <div id="internetPackageInfo">
+    <h1>Plan <span id="internetPackagePlan"><%=@internet_package.plan %></span></h1>
     <br><br>
     <ul>
-        <li>Price: $<%=@internet_package.price%> </li>
-        <li>Download Speed: <%=@internet_package.download_speed%> mbps</li>
+        <li>Price: $<span id="internetPackagePrice"><%=@internet_package.price%></span> </li>
+        <li>Download Speed: <span id="internetPackageDownloadSpeed"><%=@internet_package.download_speed%></span> mbps</li>
     </ul>
+  </div>
+
+    <button class="js-next" data-id="<%= @internet_package.id %>">Get Next Internet Package Option</button>
 
     <% if !!@user.admin %>
 
@@ -38,6 +42,54 @@
 </div>
 
 <script type="text/javascript" charset="utf-8">
+  // let internetPackageId = 0
+  class InternetPackage{
+    constructor(data){
+        // internetPackageId++
+        this.plan = data.plan
+        this.price = data.price
+        this.download_speed = data.download_speed
+        // store.neighborhoods.push(this)
+    }
+
+  }
+
+  // prototypes, avoid arrow functions
+  InternetPackage.prototype.html = function(){
+      let data = '<h1>Plan ' + this.plan + '</h1>' +
+          '<br><br>' + 
+          '<ul>' +
+            '<li>Price: $' + this.price + '</li>' +
+            '<li>Download Speed: ' + this.download_speed + ' mbps</li>' +
+          '</ul>'
+      return data
+  }
+
+  $(function () {
+    $('.js-next').on('click', function(event) {
+      //prevent form from submitting the default way
+      event.preventDefault();
+
+      let id = parseInt($(".js-next").attr("data-id")) + 1
+
+      if (id > 4){
+        id = 1
+      }
+
+      $.get("/internet_packages/" + id + ".json", function(data) {
+
+        let ip = new InternetPackage(data)
+
+        // let internet_package = data;
+        $("#internetPackageInfo").html(ip.html()) 
+        // $("#internetPackagePlan").text(internet_package["plan"])
+        // $("#internetPackagePrice").text(internet_package["price"])
+        // $("#internetPackageDownloadSpeed").text(internet_package["download_speed"])
+        $(".js-next").attr("data-id", data["id"])
+      });
+    });
+  });
+
   $(function () {
     $('.admin-users').on('click', function(event) {
       //prevent form from submitting the default way
