@@ -6,7 +6,7 @@
         <li>Download Speed: <%=@internet_package.download_speed%> mbps</li>
     </ul>
 
-    <%=form_for @internet_package.payments.build, url: internet_package_payments_path(@internet_package) do |f|%>
+    <%=form_for @internet_package.payments.build, url: internet_package_payments_path(@internet_package), html: {id: @internet_package.id} do |f|%>
 
         <%=f.label :months%>
         <br>
@@ -15,4 +15,37 @@
         <br>
         <%=f.submit%>
     <%end %>
+
+  <div>
+    <h3 id="username"></h3>
+    <p id="paymentMonths"></p>
+    <h4 id="internetStatusChange"></h4>
+    <h4 id="servicePeriod"></h4>
+    <p id="servicePeriodStartDate"></p>
+    <p id="servicePeriodEndDate"></p>
+  </div>
 </div>
+
+<script type="text/javascript" charset="utf-8">
+  $(function () {
+    let id = $('form')[0].id
+    $('form').submit(function(event) {
+      //prevent form from submitting the default way
+      event.preventDefault();
+      let values = $(this).serialize();
+ 
+      let posting = $.post('/internet_packages/' + id + '/payments.json' , values);
+ 
+      posting.done(function(data) {
+        let user = data;
+        $("#username").text("username: " + user["username"]);
+        $("#paymentMonths").text("You just payed for " + user["payments"][user["payments"].length -1]["months"] + " months.");
+        $("#servicePeriod").text("Service Period: ");
+        $("#servicePeriodStartDate").text("Start Date: " + user["service_periods"][user["service_periods"].length - 1]["start_time"]);
+        $("#servicePeriodEndDate").text("End Date: " + user["service_periods"][user["service_periods"].length - 1]["end_time"]);
+
+        $("#internetStatusChange").text("Internet Status: " + user["internet_status_changes"][user["internet_status_changes"].length - 1]["comment"]);
+      });
+    });
+  });
+</script>

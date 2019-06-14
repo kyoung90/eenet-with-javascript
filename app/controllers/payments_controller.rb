@@ -25,11 +25,12 @@ class PaymentsController < ApplicationController
                 @payment.save
 
                 # attempt mikrotik connection
-                if user.activate_internet
+                # Commented out because I no longer have access to internet
+                # if user.activate_internet
                     @service_period = ServicePeriod.create_or_find_and_update(internet_package, user, time, params[:payment][:months].to_i)
-                end
+                # end
                 
-                redirect_to payments_path
+                render json: user, status: 201
             else 
                 redirect_to payments_path, alert: "Something went wrong. Payment not processed"
             end 
