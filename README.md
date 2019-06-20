@@ -1,6 +1,6 @@
 # ISP-Website
 
-A website that allows you to buy an internet package plan. It keeps track of your payment history, service periods, and internet status changes. It connects to a router through the mtik gem and makes changes to pppoe profiles. This is a skeleton project to communicate with different routers and store information on the website. No payment API has been implemented yet.
+A website that allows you to buy an internet package plan. It keeps track of your payment history, service periods, and internet status changes. It connects to a router through the mtik gem and makes changes to pppoe profiles. It has http routes for giving out data in JSON format, and it uses it to display some content without having to refresh. This is a skeleton project to communicate with different routers and store information on a website. No payment API has been implemented yet.
 
 ## Getting Started 
 
@@ -27,11 +27,14 @@ The documentation for the communication I used for the tikcli is [here](https://
 
 * Login/Signup users
 * Login users with facebook
-* View all internet plans and 'purchase'
-* Send router commands 
+* View all internet plans 
+* 'Purchase' internet package services and show receipt without having to refresh the page
+* Navigate through internet packages without having to refresh the page
+* Send router commands
 * View payment histories
 * View all service periods
 * View all internet status changes
+* Admins can view all users that have active service period for a particular internet package
 
 ## Contributing
 
